@@ -5,10 +5,12 @@
  */
 package com.toko.bunga.controller;
 
-import com.toko.bunga.config.HibernateUtil;
-import com.toko.bunga.dao.TokoBungaDao;
+//import com.toko.bunga.config.HibernateUtil;
+//import com.toko.bunga.dao.TokoBungaDao;
+import static com.toko.bunga.app.TokoBungaApp.getTokoBungaService;
 import com.toko.bunga.model.TokoBunga;
 import com.toko.bunga.model.TokoBungaTabelModel;
+
 import com.toko.bunga.view.TokoBungaView;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -20,8 +22,8 @@ import javax.swing.JOptionPane;
 public class TokoBungaController {
     private TokoBungaView tokoBungaView;
     private List<TokoBunga> listTokoBunga;
-    private TokoBungaTabelModel TokoBungaTabelModel;
-    private final TokoBungaDao tokoBungaDao = HibernateUtil.getTokoBungaDao();
+    private TokoBungaTabelModel tokoBungaTableModel;
+    //private final TokoBungaDao tokoBungaDao = HibernateUtil.getTokoBungaDao();
 
     public TokoBungaController(TokoBungaView tokoBungaView) {
         this.tokoBungaView = tokoBungaView;
@@ -42,7 +44,7 @@ public class TokoBungaController {
         tokoBunga.setHarga(Integer.parseInt(this.tokoBungaView.getTxtHarga().getText()));
         
         try{
-            tokoBungaDao.save(tokoBunga);
+            getTokoBungaService().save(tokoBunga);
             JOptionPane.showMessageDialog(null, "Berhasil menyimpan Bunga", "Success", JOptionPane.INFORMATION_MESSAGE);
             clear();
             getAllData();
@@ -59,7 +61,7 @@ public class TokoBungaController {
         tokoBunga.setHarga(Integer.parseInt(this.tokoBungaView.getTxtHarga().getText()));
         
         try{
-            tokoBungaDao.update(tokoBunga);
+            getTokoBungaService().update(tokoBunga);
             JOptionPane.showMessageDialog(null, "Berhasil mengubah Bunga", "Success", JOptionPane.INFORMATION_MESSAGE);
             clear();
             getAllData();
@@ -78,7 +80,7 @@ public class TokoBungaController {
             int option = JOptionPane.showConfirmDialog(null, "Apakah ingin menghapus ini ?","Warning", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE);
             if(option == JOptionPane.YES_OPTION){
                 try{
-                    tokoBungaDao.delete(tokoBunga);
+                    getTokoBungaService().delete(tokoBunga);
                     JOptionPane.showMessageDialog(null, "Berhasil menghapus Bunga", "Success", JOptionPane.INFORMATION_MESSAGE);
                     clear();
                     getAllData();
@@ -90,9 +92,9 @@ public class TokoBungaController {
     }
     
     public void getAllData(){
-        listTokoBunga = tokoBungaDao.getList();
-        TokoBungaTabelModel = new TokoBungaTabelModel(listTokoBunga);
-        this.tokoBungaView.getTblBunga().setModel(TokoBungaTabelModel);
+        listTokoBunga = getTokoBungaService().getList();
+        tokoBungaTableModel = new TokoBungaTabelModel(listTokoBunga);
+        this.tokoBungaView.getTblBunga().setModel(tokoBungaTableModel);
     }
     
     public void getdata(){
